@@ -1,6 +1,5 @@
 import React from "react";
 import { CIcon } from "@coreui/icons-react";
-import { cilFactory } from "@coreui/icons";
 
 const _nav = [
   {
@@ -21,25 +20,25 @@ const _nav = [
     _tag: "CSidebarNavItem",
     name: "Organizations",
     to: "/manage/organizations",
-    icon: "cil-factory",
+    icon: "cil-shield-alt",
   },
   {
     _tag: "CSidebarNavItem",
     name: "Majors",
     to: "/manage/majors",
-    icon: <CIcon name="cilBriefcase" customClasses="c-sidebar-nav-icon" />,
+    icon: "cil-file",
   },
   {
     _tag: "CSidebarNavItem",
     name: "Jobseekers",
     to: "/manage/jobseekers",
-    icon: "cil-drop",
+    icon: "cil-user",
   },
   {
     _tag: "CSidebarNavItem",
     name: "Recruitment News",
     to: "/manage/recruitment-news",
-    icon: "cil-pencil",
+    icon: "cil-spreadsheet",
   },
   {
     _tag: "CSidebarNavTitle",
@@ -297,40 +296,6 @@ const _nav = [
   {
     _tag: "CSidebarNavDivider",
     className: "m-2",
-  },
-  {
-    _tag: "CSidebarNavTitle",
-    _children: ["Labels"],
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Label danger",
-    to: "",
-    icon: {
-      name: "cil-star",
-      className: "text-danger",
-    },
-    label: true,
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Label info",
-    to: "",
-    icon: {
-      name: "cil-star",
-      className: "text-info",
-    },
-    label: true,
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Label warning",
-    to: "",
-    icon: {
-      name: "cil-star",
-      className: "text-warning",
-    },
-    label: true,
   },
   {
     _tag: "CSidebarNavDivider",
