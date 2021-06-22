@@ -38,6 +38,26 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'));
 const Users = React.lazy(() => import('./views/users/Users'));
 const User = React.lazy(() => import('./views/users/User'));
 
+const Jobseekers = React.lazy(() => import('./views/pages/jobseeker/listJobseeker/ListJobseeker'));
+const Jobseeker = React.lazy(() => import('./views/pages/jobseeker/detailJobseeker/DetailJobseeker'));
+const CreateJobseeker = React.lazy(() => import('./views/pages/jobseeker/createJobseeker/CreateJobseeker'));
+const UpdateJobseeker = React.lazy(() => import('./views/pages/jobseeker/updateJobseeker/UpdateJobseeker'));
+
+const Majors = React.lazy(() => import('./views/pages/major/listMajor/ListMajor'));
+const Major = React.lazy(() => import('./views/pages/major/detailMajor/DetailMajor'));
+const CreateMajor = React.lazy(() => import('./views/pages/major/createMajor/CreateMajor'));
+const UpdateMajor = React.lazy(() => import('./views/pages/major/updateMajor/UpdateMajor'));
+
+const Organizations = React.lazy(() => import('./views/pages/organization/listOrganization/ListOrganization'));
+const Organization = React.lazy(() => import('./views/pages/organization/detailOrganization/DetailOrganization'));
+const CreateOrganization = React.lazy(() => import('./views/pages/organization/createOrganization/CreateOrganization'));
+const UpdateOrganization = React.lazy(() => import('./views/pages/organization/updateOrganization/UpdateOrganization'));
+
+const RecruitmentNewsList = React.lazy(() => import('./views/pages/recruitmentNews/listRecruitmentNews/ListRecruitmentNews'));
+const RecruitmentNews = React.lazy(() => import('./views/pages/recruitmentNews/detailRecruitmentNews/DetailRecruitmentNews'));
+const CreateRecruitmentNews = React.lazy(() => import('./views/pages/recruitmentNews/createRecruitmentNews/CreateRecruitmentNews'));
+const UpdateRecruitmentNews = React.lazy(() => import('./views/pages/recruitmentNews/updateRecruitmentNews/UpdateRecruitmentNews'));
+
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
@@ -78,7 +98,23 @@ const routes = [
   { path: '/notifications/toaster', name: 'Toaster', component: Toaster },
   { path: '/widgets', name: 'Widgets', component: Widgets },
   { path: '/users', exact: true,  name: 'Users', component: Users },
-  { path: '/users/:id', exact: true, name: 'User Details', component: User }
+  { path: '/users/:id', exact: true, name: 'User Details', component: User },
+  { path: '/manage/jobseekers', exact: true, name: 'Jobseekers', component: Jobseekers},
+  { path: '/manage/jobseekers/detail/:id', exact: true, name: 'Jobseeker Details', component: Jobseeker},
+  { path: '/manage/jobseekers/create', exact: true, name: 'Jobseeker Create', component: CreateJobseeker},
+  { path: '/manage/jobseekers/update/:id', exact: true, name: 'Jobseeker Update', component: UpdateJobseeker},
+  { path: '/manage/majors', exact: true, name: 'Majors', component: Majors},
+  { path: '/manage/majors/detail/:id', exact: true, name: 'Major Details', component: Major},
+  { path: '/manage/majors/create', exact: true, name: 'Major Create', component: CreateMajor},
+  { path: '/manage/majors/update/:id', exact: true, name: 'Major Update', component: UpdateMajor},
+  { path: '/manage/organizations', exact: true, name: 'Organizations', component: Organizations},
+  { path: '/manage/organizations/detail/:id', exact: true, name: 'Organization Details', component: Organization},
+  { path: '/manage/organizations/create', exact: true, name: 'Organization Create', component: CreateOrganization},
+  { path: '/manage/organizations/update/:id', exact: true, name: 'Organization Update', component: UpdateOrganization},
+  { path: '/manage/recruitment-news', exact: true, name: 'Recruitment News', component: RecruitmentNewsList},
+  { path: '/manage/recruitment-news/detail/:id', exact: true, name: 'Recruitment News Details', component: RecruitmentNews},
+  { path: '/manage/recruitment-news/create', exact: true, name: 'Recruitment News Create', component: CreateRecruitmentNews},
+  { path: '/manage/recruitment-news/update/:id', exact: true, name: 'Recruitment News Update', component: UpdateRecruitmentNews},
 ];
 
 export default routes;

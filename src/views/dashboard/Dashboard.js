@@ -10,19 +10,39 @@ import {
   CCol,
   CProgress,
   CRow,
-  CCallout
+  CCallout,
+  CWidgetIcon
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import { cilShieldAlt, cilFile, cilUser, cilSpreadsheet } from '@coreui/icons';
 
 import MainChartExample from '../charts/MainChartExample.js'
-
-const WidgetsDropdown = lazy(() => import('../widgets/WidgetsDropdown.js'))
-const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
 
 const Dashboard = () => {
   return (
     <>
-      <WidgetsDropdown />
+      <CRow>
+        <CCol xs="12" sm="6" lg="3">
+          <CWidgetIcon text="Organization" header="12" color="primary">
+            <CIcon width={24} content={cilShieldAlt}/>
+          </CWidgetIcon>
+        </CCol>
+        <CCol xs="12" sm="6" lg="3">
+          <CWidgetIcon text="Major" header="2" color="info">
+            <CIcon width={24} content={cilFile}/>
+          </CWidgetIcon>
+        </CCol>
+        <CCol xs="12" sm="6" lg="3">
+          <CWidgetIcon text="Recruitment News" header="60" color="warning">
+            <CIcon width={24} content={cilUser}/>
+          </CWidgetIcon>
+        </CCol>
+        <CCol xs="12" sm="6" lg="3">
+          <CWidgetIcon text="Jobseeker" header="50" color="danger">
+            <CIcon width={24} content={cilSpreadsheet}/>
+          </CWidgetIcon>
+        </CCol>
+      </CRow>
       <CCard>
         <CCardBody>
           <CRow>
@@ -106,8 +126,6 @@ const Dashboard = () => {
           </CRow>
         </CCardFooter>
       </CCard>
-
-      <WidgetsBrand withCharts/>
 
       <CRow>
         <CCol>
