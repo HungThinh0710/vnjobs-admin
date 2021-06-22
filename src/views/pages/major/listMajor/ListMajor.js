@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   CBadge,
   CCard,
@@ -7,13 +7,24 @@ import {
   CCol,
   CDataTable,
   CRow,
+  CButton
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react'
-import {cilPlus} from '@coreui/icons';
+import {cilPlus, cilPencil, cilTrash, cilMonitor} from '@coreui/icons';
 
-import usersData from '../../../users/UsersData';
+import majorData from './MajorData';
 import { NavLink } from "react-router-dom";
-const fields = ['name','registered', 'role', 'status'];
+const fields = [
+  {key: 'major_name', sorter: true, filter: true},
+  {key: 'image_path', sorter: true, filter: true},
+  {key: 'updated_at', sorter: true, filter: true},
+  {
+    key: 'show_details',
+    label: '',
+    sorter: false,
+    filter: false
+  }
+];
 const getBadge = status => {
   switch (status) {
     case 'Active': return 'success'
@@ -25,6 +36,7 @@ const getBadge = status => {
 }
 
 const ListMajor = () => {
+  const [majorList, setMajorList] = useState(majorData.data);
   return (
     <div>
       <CRow>
@@ -40,20 +52,40 @@ const ListMajor = () => {
             </CCardHeader>
             <CCardBody>
               <CDataTable
-                items={usersData}
+                items={majorList}
                 fields={fields}
                 striped
                 hover
                 scopedSlots={{
-                  'status':
+                  'show_details':
                     (item) => (
                       <td>
-                        <CBadge color={getBadge(item.status)}>
-                          {item.status}
-                        </CBadge>
+                        <CButton
+                          color="info"
+                          variant="outline"
+                          square="true"
+                          size="sm"
+                        >
+                          <CIcon content={cilMonitor} style={{marginRight: '3px'}} />
+                        </CButton>
+                        <CButton
+                          color="warning"
+                          variant="outline"
+                          square="true"
+                          size="sm"
+                        >
+                          <CIcon content={cilPencil} style={{marginRight: '3px'}} />
+                        </CButton>
+                        <CButton
+                          color="danger"
+                          variant="outline"
+                          square="true"
+                          size="sm"
+                        >
+                          <CIcon content={cilTrash} style={{marginRight: '3px'}} />
+                        </CButton>
                       </td>
                     )
-
                 }}
               />
             </CCardBody>
