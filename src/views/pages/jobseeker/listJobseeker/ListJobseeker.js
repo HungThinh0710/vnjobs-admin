@@ -7,7 +7,11 @@ import {
   CCol,
   CDataTable,
   CRow,
-  CButton
+  CButton,
+  CDropdown,
+  CDropdownItem,
+  CDropdownMenu,
+  CDropdownToggle,
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react'
 import {cilPlus, cilPencil, cilTrash, cilMonitor} from '@coreui/icons';
@@ -77,7 +81,7 @@ const ListJobseeker = () => {
         # Current Page {currentPage}/{lastPage}
         </CCol>
         <CCol col="4" className="text-right mb-3">
-          <NavLink className="btn btn-outline-info" to="/manage/recruitment-news/create">
+          <NavLink className="btn btn-outline-info" to="/manage/jobseekers/create">
             <CIcon content={cilPlus} style={{paddingBottom: '3px'}} /> Create New Jobseeker
           </NavLink>
         </CCol>
@@ -99,30 +103,25 @@ const ListJobseeker = () => {
                   'show_details':
                     (item) => (
                       <td>
-                        <CButton
-                          color="info"
-                          variant="outline"
-                          square="true"
-                          size="sm"
-                        >
-                          <CIcon content={cilMonitor} style={{marginRight: '3px'}} />
-                        </CButton>
-                        <CButton
-                          color="warning"
-                          variant="outline"
-                          square="true"
-                          size="sm"
-                        >
-                          <CIcon content={cilPencil} style={{marginRight: '3px'}} />
-                        </CButton>
-                        <CButton
-                          color="danger"
-                          variant="outline"
-                          square="true"
-                          size="sm"
-                        >
-                          <CIcon content={cilTrash} style={{marginRight: '3px'}} />
-                        </CButton>
+                        <CDropdown className="m-1">
+                          <CDropdownToggle>
+                            Options
+                          </CDropdownToggle>
+                          <CDropdownMenu>
+                            <CDropdownItem>
+                              <CIcon content={cilMonitor} className="text-info" style={{marginRight: '3px'}} />
+                              Detail
+                            </CDropdownItem>
+                            <CDropdownItem>
+                              <CIcon content={cilPencil} className="text-warning" style={{marginRight: '3px'}} />
+                              Update
+                            </CDropdownItem>
+                            <CDropdownItem>
+                              <CIcon content={cilTrash} className="text-danger" style={{marginRight: '3px'}} />
+                              Delete
+                            </CDropdownItem>
+                          </CDropdownMenu>
+                        </CDropdown>
                       </td>
                     ),
                   'is_elect': (item) => (
