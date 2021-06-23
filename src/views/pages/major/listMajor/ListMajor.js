@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {
   CBadge,
   CCard,
@@ -13,11 +13,13 @@ import {
   CDropdownMenu,
   CDropdownToggle,
 } from '@coreui/react';
-import CIcon from '@coreui/icons-react'
+import CIcon from '@coreui/icons-react';
 import {cilPlus, cilPencil, cilTrash, cilMonitor} from '@coreui/icons';
-
-import majorData from './MajorData';
+import * as Config from '../../../../reusable/Config';
 import { NavLink } from "react-router-dom";
+const axios = require('axios');
+
+// import majorData from './MajorData';
 const fields = [
   {key: 'major_name', sorter: true, filter: true},
   {key: 'image_path', sorter: true, filter: true},
@@ -40,7 +42,28 @@ const getBadge = status => {
 }
 
 const ListMajor = () => {
-  const [majorList, setMajorList] = useState(majorData.data);
+  const [majorList, setMajorList] = useState(null);
+
+  useEffect(() => {
+    const getMajorList = async () => {
+      try {
+        const response = await axios.get(Config.LIST_MAJOR);
+        if (response.status === 200) {
+          setMajorList(response.data.data);
+        }
+      } catch (error) {
+        if (error.response.status !== undefined) {
+          console.log(error.response);
+        }
+        else {
+          console.log(error.message);
+        }
+      }
+    }
+
+    getMajorList();
+  }, [])
+
   return (
     <div>
       <CRow>
@@ -69,7 +92,7 @@ const ListMajor = () => {
                             Options
                           </CDropdownToggle>
                           <CDropdownMenu>
-                            <CDropdownItem>
+                            <CDropdownItem to={'/manage/majors/detail/' + item.id}>
                               <CIcon content={cilMonitor} className="text-info" style={{marginRight: '3px'}} />
                               Detail
                             </CDropdownItem>

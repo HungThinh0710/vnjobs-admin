@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, useState, useEffect } from 'react'
 import {
   Redirect,
   Route,
@@ -16,6 +16,16 @@ const loading = (
 )
 
 const TheContent = () => {
+
+  const [isLogged, setIsLogged] = useState(localStorage.getItem('is_logged'));
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log("check");
+      setIsLogged(localStorage.getItem('is_logged'));
+    }, 60000);
+    return () => clearInterval(interval);
+  }, [])
+
   return (
     <main className="c-main">
       <CContainer fluid>
@@ -35,7 +45,7 @@ const TheContent = () => {
                   )} />
               )
             })}
-            <Redirect from="/" to="/dashboard" />
+            {!isLogged ? <Redirect from="*" to="/login" /> : <Redirect from="/" to="/dashboard" />}
           </Switch>
         </Suspense>
       </CContainer>

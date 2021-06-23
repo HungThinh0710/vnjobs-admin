@@ -6,7 +6,6 @@ import {
   CCol,
   CDataTable,
   CRow,
-  CButton,
   CBadge,
   CDropdown,
   CDropdownItem,
@@ -16,8 +15,10 @@ import {
 import CIcon from '@coreui/icons-react'
 import {cilPlus, cilPencil, cilTrash, cilMonitor} from '@coreui/icons';
 
-import recruitmentNewsData from './RecruitmentNewsData';
+// import recruitmentNewsData from './RecruitmentNewsData';
+import * as Config from '../../../../reusable/Config';
 import { NavLink } from "react-router-dom";
+const axios = require('axios');
 const fields = [
   { key: 'org_id' }, 
   { key: 'author_id' }, 
@@ -41,12 +42,56 @@ const fields = [
 
 const ListRecruitmentNews = () => {
 
-  const [listRecruitmentData, setListRecruitmentData] = useState(recruitmentNewsData.data);
-  const [currentPage, setCurrentPage] = useState(recruitmentNewsData.current_page);
-  const [lastPage, setLastPage] = useState(recruitmentNewsData.last_page);
-  const handleClick = (link) => {
+  const [listRecruitmentData, setListRecruitmentData] = useState(null);
+  const [currentPage, setCurrentPage] = useState(null);
+  const [lastPage, setLastPage] = useState(null);
+  const [prev, setPrev] = useState(null);
+  const [next, setNext] = useState(null);
+
+  useEffect(() => {
+    const getListRecruitmentNews = async() => {
+      try {
+        const response = await axios.get(Config.LIST_RECRUITMENTNEWS);
+        if (response.status === 200) {
+          setListRecruitmentData(response.data.data);
+          setCurrentPage(response.data.current_page);
+          setLastPage(response.data.last_page);
+          setPrev(response.data.prev_page_url);
+          setNext(response.data.next_page_url);
+        }
+      } catch (error) {
+        if (error.response.status !== undefined) {
+          console.log(error.response);
+        }
+        else {
+          console.log(error.message);
+        }
+      }
+    }
+    getListRecruitmentNews();
+  }, [])
+
+  const handleClick = async (link) => {
     console.log(link);
-    return;
+    try {
+      const response = await axios.get(link);
+      if (response.status === 200) {
+        console.log(response.data);
+        setListRecruitmentData(response.data.data);
+        setCurrentPage(response.data.current_page);
+        setLastPage(response.data.last_page);
+        console.log(response.data.prev_page_url);
+        setPrev(response.data.prev_page_url);
+        setNext(response.data.next_page_url);
+      }
+    } catch (error) {
+      if (error.response.status !== undefined) {
+        console.log(error.response);
+      }
+      else {
+        console.log(error.message);
+      }
+    }
   }
 
   return (
@@ -55,24 +100,22 @@ const ListRecruitmentNews = () => {
         <CCol col="8" className="text-left mb-3">
         <nav aria-label="Page navigation" style={{display: 'inline-block', paddingRight: '30px'}}>
           <ul className="pagination ">
-            {recruitmentNewsData.prev_page_url !== null ? 
+            {prev !== null ? 
             <li className="page-item">
-              <button className="page-link" onClick={() => handleClick(recruitmentNewsData.prev_page_url)} tabIndex="-1">Previous</button>
+              <button className="page-link" onClick={() => handleClick(prev)} tabIndex="-1">Previous</button>
             </li>
             : 
             <li className="page-item disabled">
               <NavLink className="page-link" to="#" tabIndex="-1">Previous</NavLink>
-            </li>
-            }
-            {recruitmentNewsData.next_page_url !== null ? 
+            </li>}
+            {next !== null ? 
             <li className="page-item">
-              <button className="page-link" onClick={() => handleClick(recruitmentNewsData.next_page_url)}>Next</button>
+              <button className="page-link" onClick={() => handleClick(next)}>Next</button>
             </li>
             : 
             <li className="page-item disabled">
               <NavLink className="page-link" to="#">Next</NavLink>
-            </li>
-            }
+            </li>}
           </ul>
         </nav>
         # Current Page {currentPage}/{lastPage}
@@ -105,7 +148,7 @@ const ListRecruitmentNews = () => {
                             Options
                           </CDropdownToggle>
                           <CDropdownMenu>
-                            <CDropdownItem>
+                            <CDropdownItem to={'/manage/recruitment-news/detail/' + item.id}>
                               <CIcon content={cilMonitor} className="text-info" style={{marginRight: '3px'}} />
                               Detail
                             </CDropdownItem>

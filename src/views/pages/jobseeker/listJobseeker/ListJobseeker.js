@@ -7,7 +7,6 @@ import {
   CCol,
   CDataTable,
   CRow,
-  CButton,
   CDropdown,
   CDropdownItem,
   CDropdownMenu,
@@ -16,8 +15,10 @@ import {
 import CIcon from '@coreui/icons-react'
 import {cilPlus, cilPencil, cilTrash, cilMonitor} from '@coreui/icons';
 
-import jobseekerData from './JobseekerData';
+// import jobseekerData from './JobseekerData';
 import { NavLink } from "react-router-dom";
+import * as Config from '../../../../reusable/Config';
+const axios = require('axios');
 const fields = [
   {key: 'rn_id', sorter: true, filter: true},
   {key: 'user_id', sorter: true, filter: true},
@@ -33,24 +34,58 @@ const fields = [
     filter: false
   }
 ];
-const getBadge = status => {
-  switch (status) {
-    case 'Active': return 'success'
-    case 'Inactive': return 'secondary'
-    case 'Pending': return 'warning'
-    case 'Banned': return 'danger'
-    default: return 'primary'
-  }
-}
 
 const ListJobseeker = () => {
-  const [listJobseeker, setListJobseeker] = useState(jobseekerData.data);
-  const [currentPage, setCurrentPage] = useState(jobseekerData.current_page);
-  const [lastPage, setLastPage] = useState(jobseekerData.last_page);
+  const [jobseekerData, setJobseekerData] = useState(null);
+  const [listJobseeker, setListJobseeker] = useState(null);
+  const [currentPage, setCurrentPage] = useState(null);
+  const [lastPage, setLastPage] = useState(null);
+  const [prev, setPrev] = useState(null);
+  const [next, setNext] = useState(null);
 
-  const handleClick = (link) => {
-    console.log(link);
-    return;
+  useEffect(() => {
+    const getListJobseeker = async () => {
+      try {
+        const response = await axios.get(Config.LIST_JOBSEEKER);
+        if (response.status === 200) {
+          setListJobseeker(response.data.data);
+          setJobseekerData(response.data);
+          setCurrentPage(response.data.current_page);
+          setLastPage(response.data.last_page);
+          setPrev(response.data.prev_page_url);
+          setNext(response.data.next_page_url);
+        }
+      } catch (error) {
+        if (error.response.status !== undefined) {
+          console.log(error.response);
+        }
+        else {
+          console.log(error.message);
+        }
+      }
+    }
+    getListJobseeker();
+  }, []);
+
+  const handleClick = async (link) => {
+    try {
+      const response = await axios.get(link);
+      if (response.status === 200) {
+        setListJobseeker(response.data.data);
+        setJobseekerData(response.data);
+        setCurrentPage(response.data.current_page);
+        setLastPage(response.data.last_page);
+        setPrev(response.data.prev_page_url);
+        setNext(response.data.next_page_url);
+      }
+    } catch (error) {
+      if (error.response.status !== undefined) {
+        console.log(error.response);
+      }
+      else {
+        console.log(error.message);
+      }
+    }
   }
   return (
     <div>
@@ -58,18 +93,18 @@ const ListJobseeker = () => {
         <CCol col="8" className="text-left mb-3">
         <nav aria-label="Page navigation" style={{display: 'inline-block', paddingRight: '30px'}}>
           <ul className="pagination ">
-            {jobseekerData.prev_page_url !== null ? 
+            {prev !== null ? 
             <li className="page-item">
-              <button className="page-link" onClick={() => handleClick(jobseekerData.prev_page_url)} tabIndex="-1">Previous</button>
+              <button className="page-link" onClick={() => handleClick(prev)} tabIndex="-1">Previous</button>
             </li>
             : 
             <li className="page-item disabled">
               <NavLink className="page-link" to="#" tabIndex="-1">Previous</NavLink>
             </li>
             }
-            {jobseekerData.next_page_url !== null ? 
+            {next !== null ? 
             <li className="page-item">
-              <button className="page-link" onClick={() => handleClick(jobseekerData.next_page_url)}>Next</button>
+              <button className="page-link" onClick={() => handleClick(next)}>Next</button>
             </li>
             : 
             <li className="page-item disabled">
@@ -108,7 +143,7 @@ const ListJobseeker = () => {
                             Options
                           </CDropdownToggle>
                           <CDropdownMenu>
-                            <CDropdownItem>
+                            <CDropdownItem to={'/manage/jobseekers/detail/' + item.id}>
                               <CIcon content={cilMonitor} className="text-info" style={{marginRight: '3px'}} />
                               Detail
                             </CDropdownItem>

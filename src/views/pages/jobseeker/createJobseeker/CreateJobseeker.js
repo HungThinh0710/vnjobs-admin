@@ -46,7 +46,7 @@ const CreateJobseeker = () => {
             <CInputFile id="file-input" name="cv_path"/>
             </CFormGroup>
             <CFormGroup>
-              <CLabel htmlFor="street">Cover Letter</CLabel>
+              <CLabel htmlFor="file-input">Cover Letter</CLabel>
             <CInputFile id="file-input" name="cover_letter_path"/>
             </CFormGroup>
             <CFormGroup>

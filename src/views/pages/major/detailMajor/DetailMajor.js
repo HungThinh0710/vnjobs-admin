@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     CCard,
     CCardBody,
@@ -8,16 +8,32 @@ import {
     CInput,
     CLabel,
     CRow,
-    CCardFooter,
-    CButton,
-    CSelect,
-    CInputFile,
     CForm,
-    CFormText
   } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+import axios from 'axios';
+import * as Config from '../../../../reusable/Config';
 
-const DetailMajor = () => {
+const DetailMajor = (props) => {
+    const [item, setItem] = useState(null);
+    const id = props.match.params.id;
+    useEffect(()=>{
+        const getData = async () => {
+            try {
+                const response = await axios.get(Config.LIST_MAJOR + '/' + id);
+                if (response.status === 200) {
+                    setItem(response.data);
+                }
+            } catch (error) {
+                if (error.response.status !== undefined) {
+                    console.log(error.response);
+                  }
+                  else {
+                    console.log(error.message);
+                  }
+            }
+        }
+        getData();
+    }, [id]);
     return (
         <>
             <CRow className="d-flex justify-content-center">
@@ -34,8 +50,7 @@ const DetailMajor = () => {
                                 <CLabel htmlFor="major_name">Major Name</CLabel>
                             </CCol>
                             <CCol xs="12" md="9">
-                                <CInput type="text" id="major_name" name="major_name" value="IT" disabled placeholder="Enter Email..." autoComplete="email" />
-                                {/* <CFormText className="help-block">Please enter your email</CFormText> */}
+                                {item ? item.major_name : 'Major name'}
                             </CCol>
                             </CFormGroup>
                             <CFormGroup row>
@@ -43,15 +58,11 @@ const DetailMajor = () => {
                                 <CLabel htmlFor="image_path">Image Path</CLabel>
                             </CCol>
                             <CCol xs="12" md="9">
-                                <CInput type="text" id="image_path" name="image_path" value="path" disabled placeholder="Enter Password..." autoComplete="current-password"/>
-                                {/* <CFormText className="help-block">Please enter your password</CFormText> */}
+                                {item ? item.image_path : 'path'}
                             </CCol>
                             </CFormGroup>
                         </CForm>
                         </CCardBody>
-                        <CCardFooter>
-                        <CButton type="submit" size="sm" color="primary"><CIcon name="cil-scrubber" /> Update</CButton> <CButton type="reset" size="sm" color="danger"><CIcon name="cil-ban" /> Reset</CButton>
-                        </CCardFooter>
                     </CCard>
                 </CCol>
             </CRow>
