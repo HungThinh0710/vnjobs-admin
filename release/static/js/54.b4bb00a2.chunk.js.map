@@ -1,0 +1,1 @@
+{"version":3,"sources":["views/pages/major/updateMajor/UpdateMajor.js"],"names":["UpdateMajor"],"mappings":"6KAAA,wBAMeA,UAJK,WAClB,OAAO","file":"static/js/54.b4bb00a2.chunk.js","sourcesContent":["import React from \"react\";\r\n\r\nconst UpdateMajor = () => {\r\n  return <div>Update Major</div>;\r\n};\r\n\r\nexport default UpdateMajor;\r\n"],"sourceRoot":""}
