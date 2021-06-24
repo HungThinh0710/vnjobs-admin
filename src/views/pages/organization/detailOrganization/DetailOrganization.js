@@ -1,23 +1,69 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     CCard,
     CCardBody,
     CCardHeader,
     CCol,
     CFormGroup,
-    CInput,
     CLabel,
     CRow,
-    CCardFooter,
-    CButton,
-    CSelect,
-    CInputFile,
     CForm,
-    CFormText
   } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+import axios from 'axios';
+import * as Config from '../../../../reusable/Config';
 
-const DetailOrganization = () => {
+const DetailOrganization = (props) => {
+    const [item, setItem] = useState(null);
+    const [owner, setOwner] = useState(null);
+    const id = props.match.params.id;
+
+    useEffect(() => {
+        const getOwner = async(ownerId) => {
+            try {
+                const response = await axios.get(Config.LIST_USER + '/find/' + ownerId, {withCredentials: true});
+                if (response.status === 200) {
+                    setOwner(response.data);
+                }
+            } catch (error) {
+                if (error.response !== undefined) {
+                    if (error.response.status === 401) {
+                        console.log("Un Authenticated");
+                    }
+                    else {
+                        console.log(error.response);
+                    }
+                }
+                else {
+                    console.log(error.message);
+                }
+            }
+        }
+
+        const getOrganization = async () => {
+            if (id > 0) {
+                try {
+                    const response = await axios.get(Config.LIST_ORGANIZATION + '/find-by-id/' + id);
+                    if (response.status === 200) {
+                        setItem(response.data);
+                        getOwner(response.data.owner_id);
+                    }
+                } catch (error) {
+                    if (error.response.status !== undefined) {
+                        console.log(error.response);
+                    }
+                    else {
+                        console.log(error.message);
+                    }
+                }
+            }
+            else {
+                
+            }
+        }
+
+        getOrganization();
+    }, [id]);
+
     return (
         <>
             <CRow className="d-flex justify-content-center">
@@ -34,7 +80,7 @@ const DetailOrganization = () => {
                                     <CLabel htmlFor="owner_id">Owner</CLabel>
                                 </CCol>
                                 <CCol xs="12" md="9">
-                                    <CInput type="text" id="owner_id" name="owner_id" value="1" disabled placeholder="Enter Email..." />
+                                    {owner ? owner.first_name + ' ' + owner.last_name : '...'}
                                 </CCol>
                             </CFormGroup>
                             <CFormGroup row>
@@ -42,7 +88,7 @@ const DetailOrganization = () => {
                                     <CLabel htmlFor="org_name">Organization Name</CLabel>
                                 </CCol>
                                 <CCol xs="12" md="9">
-                                    <CInput type="text" id="org_name" name="org_name" value="1" disabled placeholder="Enter Password..."/>
+                                    {item ? item.org_name : '...'}
                                 </CCol>
                             </CFormGroup>
                             <CFormGroup row>
@@ -50,7 +96,7 @@ const DetailOrganization = () => {
                                     <CLabel htmlFor="phones">Phones</CLabel>
                                 </CCol>
                                 <CCol xs="12" md="9">
-                                    <CInput type="text" id="phones" name="phones" value="1" disabled placeholder="Enter Password..."/>
+                                    {item ? item.phones : '...'}
                                 </CCol>
                             </CFormGroup>
                             <CFormGroup row>
@@ -58,7 +104,7 @@ const DetailOrganization = () => {
                                     <CLabel htmlFor="description">Description</CLabel>
                                 </CCol>
                                 <CCol xs="12" md="9">
-                                    <CInput type="text" id="description" name="description" value="1" disabled placeholder="Enter Password..."/>
+                                    {item ? item.description : '...'}
                                 </CCol>
                             </CFormGroup>
                             <CFormGroup row>
@@ -66,7 +112,7 @@ const DetailOrganization = () => {
                                     <CLabel htmlFor="tax_id">Tax ID</CLabel>
                                 </CCol>
                                 <CCol xs="12" md="9">
-                                    <CInput type="text" id="tax_id" name="tax_id" value="1" disabled placeholder="Enter Password..."/>
+                                    {item ? item.tax_id : '...'}
                                 </CCol>
                             </CFormGroup>
                             <CFormGroup row>
@@ -74,7 +120,7 @@ const DetailOrganization = () => {
                                     <CLabel htmlFor="address">Address</CLabel>
                                 </CCol>
                                 <CCol xs="12" md="9">
-                                    <CInput type="text" id="address" name="address" value="1" disabled placeholder="Enter Password..."/>
+                                    {item ? item.address : '...'}
                                 </CCol>
                             </CFormGroup>
                             <CFormGroup row>
@@ -82,7 +128,7 @@ const DetailOrganization = () => {
                                     <CLabel htmlFor="logo_path">Logo Path</CLabel>
                                 </CCol>
                                 <CCol xs="12" md="9">
-                                    <CInput type="text" id="logo_path" name="logo_path" value="1" disabled placeholder="Enter Password..."/>
+                                    {item ? item.logo_path : '...'}
                                 </CCol>
                             </CFormGroup>
                             <CFormGroup row>
@@ -90,14 +136,11 @@ const DetailOrganization = () => {
                                     <CLabel htmlFor="cover_path">Cover Path</CLabel>
                                 </CCol>
                                 <CCol xs="12" md="9">
-                                    <CInput type="text" id="cover_path" name="cover_path" value="1" disabled placeholder="Enter Password..."/>
+                                    {item ? item.cover_path : '...'}
                                 </CCol>
                             </CFormGroup>
                         </CForm>
                         </CCardBody>
-                        <CCardFooter>
-                        <CButton type="submit" size="sm" color="primary"><CIcon name="cil-scrubber" /> Update</CButton> <CButton type="reset" size="sm" color="danger"><CIcon name="cil-ban" /> Reset</CButton>
-                        </CCardFooter>
                     </CCard>
                 </CCol>
             </CRow>

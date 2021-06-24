@@ -6,7 +6,6 @@ import {
   CCol,
   CDataTable,
   CRow,
-  CButton,
   CBadge,
   CDropdown,
   CDropdownItem,
@@ -16,8 +15,9 @@ import {
 import CIcon from '@coreui/icons-react'
 import {cilPlus, cilPencil, cilTrash, cilMonitor} from '@coreui/icons';
 
-import organizationData from './OrganizationData';
+import * as Config from '../../../../reusable/Config';
 import { NavLink } from "react-router-dom";
+const axios = require('axios');
 const fields = [
   {key: 'owner_id', sorter: true, filter: true},
   {key: 'org_name', sorter: true, filter: true},
@@ -35,25 +35,56 @@ const fields = [
     filter: false
   }
 ];
-const getBadge = status => {
-  switch (status) {
-    case 'Active': return 'success'
-    case 'Inactive': return 'secondary'
-    case 'Pending': return 'warning'
-    case 'Banned': return 'danger'
-    default: return 'primary'
-  }
-}
 
 const ListOrganization = () => {
 
-  const [listOrganization, setListOrganization] = useState(organizationData.data);
-  const [currentPage, setCurrentPage] = useState(organizationData.current_page);
-  const [lastPage, setLastPage] = useState(organizationData.last_page);
+  const [listOrganization, setListOrganization] = useState(null);
+  const [currentPage, setCurrentPage] = useState(null);
+  const [lastPage, setLastPage] = useState(null);
+  const [prev, setPrev] = useState(null);
+  const [next, setNext] = useState(null);
 
-  const handleClick = (link) => {
-    console.log(link);
-    return;
+  useEffect(() => {
+    const getListOrganization = async () => {
+      try {
+        const response = await axios.get(Config.LIST_ORGANIZATION);
+        if (response.status === 200) {
+          setListOrganization(response.data.data);
+          setCurrentPage(response.data.current_page);
+          setLastPage(response.data.last_page);
+          setPrev(response.data.prev_page_url);
+          setNext(response.data.next_page_url);
+        }
+      } catch (error) {
+        if (error.response.status !== undefined) {
+          console.log(error.response);
+        }
+        else {
+          console.log(error.message);
+        }
+      }
+    }
+    getListOrganization();
+  }, [])
+
+  const handleClick = async (link) => {
+    try {
+      const response = await axios.get(link);
+      if (response.status === 200) {
+        setListOrganization(response.data.data);
+        setCurrentPage(response.data.current_page);
+        setLastPage(response.data.last_page);
+        setPrev(response.data.prev_page_url);
+        setNext(response.data.next_page_url);
+      }
+    } catch (error) {
+      if (error.response.status !== undefined) {
+        console.log(error.response);
+      }
+      else {
+        console.log(error.message);
+      }
+    }
   }
   return (
     <div>
@@ -61,18 +92,18 @@ const ListOrganization = () => {
         <CCol col="8" className="text-left mb-3">
         <nav aria-label="Page navigation" style={{display: 'inline-block', paddingRight: '30px'}}>
           <ul className="pagination ">
-            {organizationData.prev_page_url !== null ? 
+            {prev !== null ? 
             <li className="page-item">
-              <button className="page-link" onClick={() => handleClick(organizationData.prev_page_url)} tabIndex="-1">Previous</button>
+              <button className="page-link" onClick={() => handleClick(prev)} tabIndex="-1">Previous</button>
             </li>
             : 
             <li className="page-item disabled">
               <NavLink className="page-link" to="#" tabIndex="-1">Previous</NavLink>
             </li>
             }
-            {organizationData.next_page_url !== null ? 
+            {next !== null ? 
             <li className="page-item">
-              <button className="page-link" onClick={() => handleClick(organizationData.next_page_url)}>Next</button>
+              <button className="page-link" onClick={() => handleClick(next)}>Next</button>
             </li>
             : 
             <li className="page-item disabled">
@@ -111,7 +142,7 @@ const ListOrganization = () => {
                             Options
                           </CDropdownToggle>
                           <CDropdownMenu>
-                            <CDropdownItem>
+                            <CDropdownItem to={'/manage/organizations/detail/' + item.id}>
                               <CIcon content={cilMonitor} className="text-info" style={{marginRight: '3px'}} />
                               Detail
                             </CDropdownItem>

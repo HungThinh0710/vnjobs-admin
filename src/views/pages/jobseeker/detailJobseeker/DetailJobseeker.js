@@ -1,23 +1,64 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     CCard,
     CCardBody,
     CCardHeader,
     CCol,
     CFormGroup,
-    CInput,
     CLabel,
     CRow,
-    CCardFooter,
-    CButton,
-    CSelect,
-    CInputFile,
     CForm,
-    CFormText
   } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+import axios from 'axios';
+import * as Config from '../../../../reusable/Config';
+  
 
-const DetailJobseeker = () => {
+const DetailJobseeker = (props) => {
+    const [item, setItem] = useState(null);
+    const [rn, setRn] = useState(null);
+    const id = props.match.params.id;
+    useEffect(()=>{
+        const getRecruitmentNews = async(rnId) => {
+            try {
+                const response = await axios.get(Config.LIST_RECRUITMENTNEWS + '/' + rnId);
+                if (response.status === 200) {
+                    setRn(response.data);
+                }
+            } catch (error) {
+                if (error.response.status !== undefined) {
+                    console.log(error.response);
+                }
+                else {
+                    console.log(error.message);
+                }
+            }
+        }
+
+        const getData = async () => {
+            if (id > 0) {
+                try {
+                    const response = await axios.get(Config.LIST_JOBSEEKER + '/' + id);
+                    if (response.status === 200) {
+                        setItem(response.data);
+                        getRecruitmentNews(response.data.rn_id);
+                    }
+                } catch (error) {
+                    if (error.response.status !== undefined) {
+                        console.log(error.response);
+                    }
+                    else {
+                        console.log(error.message);
+                    }
+                }
+            }
+            else {
+
+            }
+        }
+
+
+        getData();
+    }, [id]);
     return (
         <>
             <CRow className="d-flex justify-content-center">
@@ -34,8 +75,7 @@ const DetailJobseeker = () => {
                                         <CLabel htmlFor="rn_id">Recruitment News</CLabel>
                                     </CCol>
                                     <CCol xs="12" md="9">
-                                        <CInput type="text" id="rn_id" name="rn_id" value="1" placeholder="Enter Email..." disabled autoComplete="email" />
-                                        {/* <CFormText className="help-block">Please enter your email</CFormText> */}
+                                        {rn ? rn.title : 'title'}
                                     </CCol>
                                 </CFormGroup>
                                 <CFormGroup row>
@@ -43,33 +83,27 @@ const DetailJobseeker = () => {
                                         <CLabel htmlFor="cv_path">CV</CLabel>
                                     </CCol>
                                     <CCol xs="12" md="9">
-                                        <CInput type="text" id="cv_path" name="cv_path" value="path" disabled autoComplete="current-password"/>
-                                        {/* <CFormText className="help-block">Please enter your password</CFormText> */}
-                                </CCol>
+                                        {item ? item.cv_path : '...'}
+                                    </CCol>
                                 </CFormGroup>
                                 <CFormGroup row>
                                     <CCol md="3">
                                         <CLabel htmlFor="cover_letter_path">Cover Letter</CLabel>
                                     </CCol>
                                     <CCol xs="12" md="9">
-                                        <CInput type="text" id="cover_letter_path" name="cover_letter_path" value="path" disabled autoComplete="current-password"/>
-                                        {/* <CFormText className="help-block">Please enter your password</CFormText> */}
-                                </CCol>
+                                        {item ? item.cover_letter_path : '...'}
+                                    </CCol>
                                 </CFormGroup>
                                 <CFormGroup row>
                                     <CCol md="3">
                                         <CLabel htmlFor="exp_years">Experience Years</CLabel>
                                     </CCol>
                                     <CCol xs="12" md="9">
-                                        <CInput type="text" id="exp_years" name="exp_years" value="path" disabled autoComplete="current-password"/>
-                                        {/* <CFormText className="help-block">Please enter your password</CFormText> */}
-                                </CCol>
+                                        {item ? item.exp_years : '...'}
+                                    </CCol>
                                 </CFormGroup>
                             </CForm>
                         </CCardBody>
-                        <CCardFooter>
-                            <CButton type="submit" size="sm" color="primary"><CIcon name="cil-scrubber" /> Update</CButton> <CButton type="reset" size="sm" color="danger"><CIcon name="cil-ban" /> Reset</CButton>
-                        </CCardFooter>
                     </CCard>
                 </CCol>
             </CRow>

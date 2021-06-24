@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   CBadge,
   CDropdown,
@@ -8,8 +8,12 @@ import {
   CImg
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import axios from 'axios'
+import * as Config from '../reusable/Config';
+import useLocalStorage from 'src/reusable/UseLocalStorage';
 
 const TheHeaderDropdown = () => {
+
   return (
     <CDropdown
       inNav
