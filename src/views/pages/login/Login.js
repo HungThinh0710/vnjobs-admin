@@ -21,8 +21,8 @@ import useLocalStorage from '../../../reusable/UseLocalStorage';
 import * as Config from '../../../reusable/Config';
 
 const Login = (props) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("admin@gg.cc");
+  const [password, setPassword] = useState("123123");
   const [data, setData] = useState([]);
   const [msgError, setMsgError] = useState("");
   const [isLogged, setIsLogged] = useState(false);
@@ -128,7 +128,7 @@ const Login = (props) => {
                           <CIcon name="cil-user" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput type="email" onChange={e => setEmail(e.target.value)} placeholder="Email" autoComplete="email" />
+                      <CInput type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" autoComplete="email" />
                     </CInputGroup>
                     <CInputGroup className="mb-2">
                       <CInputGroupPrepend>
@@ -136,7 +136,7 @@ const Login = (props) => {
                           <CIcon name="cil-lock-locked" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput type="password" onChange={e => setPassword(e.target.value)} placeholder="Password" autoComplete="current-password" />
+                      <CInput type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" autoComplete="current-password" />
                     </CInputGroup>
                     <div className="mb-4">
                       <span className="small text-danger help-block">{msgError}</span>

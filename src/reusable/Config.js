@@ -1,5 +1,5 @@
-// const DOMAIN = 'https://api.vnjob.work'; // productions
-const DOMAIN = 'http://127.0.0.1:8000';
+const DOMAIN = 'https://api.vnjob.work'; // productions
+// const DOMAIN = 'http://127.0.0.1:8000';
 const ENDPOINT = DOMAIN + '/api/admin/v1';
 export const LIST_ORGANIZATION = ENDPOINT + '/organizations';
 export const LIST_MAJOR = ENDPOINT + '/majors';
