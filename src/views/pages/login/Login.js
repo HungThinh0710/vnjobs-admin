@@ -47,7 +47,7 @@ const Login = (props) => {
       }, { withCredentials: true })
         .then(async function (response) {
           if (response.status == 200) {
-            localStorage.setItem('admin_token', response.data.access_token);
+            // localStorage.setItem('admin_token', response.data.access_token);
             setLocalLoginStatus(true);
             setIsLogged(true);
           }
@@ -90,7 +90,7 @@ const Login = (props) => {
 
     console.log("hi");
     console.log(localLoginStatus);
-    if (!localLoginStatus) {
+    if (localLoginStatus) {
       axios.post(Config.CHECK_VALID_TOKEN, null,
         {
           withCredentials: true,
@@ -110,7 +110,7 @@ const Login = (props) => {
     return () => cancelTokenSource.cancel();
   }, [isLogged]);
 
-  return isLogged ? <Redirect to='/dashboard' />
+  return isLogged ? (<Redirect to='/dashboard' />)
     : (
     <div className="c-app c-default-layout flex-row align-items-center">
       <CContainer>

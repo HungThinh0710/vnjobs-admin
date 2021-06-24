@@ -5,7 +5,7 @@ const TheFooter = () => {
   return (
     <CFooter fixed={false}>
       <div>
-        <a href="https://coreui.io" target="_blank" rel="noopener noreferrer">VNJOBs </a>
+        <a href="https://admin.vnjob.work" target="_blank" rel="noopener noreferrer">VNJOBs </a>
         <span className="ml-1">&copy; 2021 All right reserve.</span>
       </div>
       <div className="mfs-auto">

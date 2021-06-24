@@ -8,7 +8,8 @@ import { CContainer, CFade } from '@coreui/react'
 
 // routes config
 import routes from '../routes'
-  
+import useLocalStorage from '../reusable/UseLocalStorage';
+
 const loading = (
   <div className="pt-3 text-center">
     <div className="sk-spinner sk-spinner-pulse"></div>
@@ -17,14 +18,15 @@ const loading = (
 
 const TheContent = () => {
 
-  const [isLogged, setIsLogged] = useState(localStorage.getItem('is_logged'));
-  useEffect(() => {
-    const interval = setInterval(() => {
-      console.log("check");
-      setIsLogged(localStorage.getItem('is_logged'));
-    }, 60000);
-    return () => clearInterval(interval);
-  }, [])
+  // const [isLogged, setIsLogged] = useState(localStorage.getItem('is_logged'));
+  const [isLogged, setIsLogged] = useLocalStorage('is_logged', false);
+
+  // useEffect(() => {
+  //     console.log("Check Authenticate");
+  //     // setIsLogged(localStorage.getItem('is_logged'));
+  //     const l = isLogged;
+  //     console.log('logged: '+ l);
+  // }, [])
 
   return (
     <main className="c-main">
@@ -38,14 +40,24 @@ const TheContent = () => {
                   path={route.path}
                   exact={route.exact}
                   name={route.name}
-                  render={props => (
-                    <CFade>
-                      <route.component {...props} />
-                    </CFade>
-                  )} />
+                  render={props =>
+                    isLogged
+                      ?
+                       ( 
+                       <CFade>
+                          <route.component {...props} />
+                        </CFade> 
+                        ) 
+                      // ( console.log("First_case") )
+                      :
+                      ( <Redirect to={{pathname: "/login" }}/> )
+                      // ( console.log("Second_case") )
+                } />
               )
             })}
-            {!isLogged ? <Redirect from="*" to="/login" /> : <Redirect from="/" to="/dashboard" />}
+            {/* {!isLogged ? <Redirect from="*" to="/login" /> : <Redirect from="/" to="/dashboard" />} */}
+            {/* Redirect / */}
+            <Redirect from="/" to="/dashboard" />
           </Switch>
         </Suspense>
       </CContainer>
